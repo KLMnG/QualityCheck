@@ -6,7 +6,11 @@ public class WordAnalytics {
 
     private List<String> namesList;
 
-
+    /**
+     * prints the occurrence of subString in all of the names in the list
+     *
+     * @param subString the given subString
+     */
     public void CountSpecificString(String subString) {
         int nameCounter = 0;
         for (String name : this.namesList) {
@@ -16,18 +20,27 @@ public class WordAnalytics {
         System.out.println(nameCounter);
     }
 
+    /**
+     * prints the number of occurrences of every subString in length of - numbeOfLettters
+     *
+     * @param numberOfLetters -size of the subString
+     */
     public void CountAllStrings(int numberOfLetters) {
         HashMap<String, Integer> subWordMap;
         for (String name : this.namesList) {
             subWordMap = getSubWordMap(name, numberOfLetters);
 //          printSubWordMap(subWordMAp, name, numberOfLetters);//TODO switch print
-            for (String subWord:subWordMap.keySet()) {
-                System.out.println(subWord+":"+subWordMap.get(subWord).intValue());
+            for (String subWord : subWordMap.keySet()) {
+                System.out.println(subWord + ":" + subWordMap.get(subWord).intValue());
             }
         }
     }
 
-
+    /**
+     * prints the subString of length - numberOfLetters with the maximum occurrences
+     *
+     * @param numberOfLetters - length of subString
+     */
     public void CountMaxString(int numberOfLetters) {
         HashMap<String, Integer> allSubWordMap = new HashMap<>();
         HashMap<String, Integer> subWordMAp;
@@ -43,15 +56,26 @@ public class WordAnalytics {
         }
     }
 
-    public void AllIncludesString(String stringInput){
-        stringInput=stringInput.toLowerCase();
+    /**
+     * prints the names that are a subString of stringInput
+     *
+     * @param stringInput - the given string
+     */
+    public void AllIncludesString(String stringInput) {
+        stringInput = stringInput.toLowerCase();
         for (String name : this.namesList) {
-            if(stringInput.contains(name.toLowerCase())){
+            if (stringInput.contains(name.toLowerCase())) {
                 System.out.println(name);
             }
         }
     }
 
+    /**
+     * adds the int value of the subStrings in subWordMap to allSubWordMap
+     *
+     * @param allSubWordMap the map to add to
+     * @param subWordMap    the map to take the value from
+     */
     private void addToAllSubMap(HashMap<String, Integer> allSubWordMap, HashMap<String, Integer> subWordMap) {
         Integer counrValue;
         for (String subWord : subWordMap.keySet()) {
@@ -64,6 +88,11 @@ public class WordAnalytics {
         }
     }
 
+    /**
+     * @param subWordMAp
+     * @param name
+     * @param numberOfLetters
+     */
     private void printSubWordMap(HashMap<String, Integer> subWordMAp, String name, int numberOfLetters) {
         String currentSubString;
         for (int i = name.length(); i >= numberOfLetters; i -= numberOfLetters) {
@@ -73,37 +102,49 @@ public class WordAnalytics {
         }
     }
 
+    /**
+     * creates a map if every subString of length - numberOfLetters in name and the amount of its occurrences
+     *
+     * @param name            the given string to extract subStrings
+     * @param numberOfLetters the size of the subString
+     * @return a map of subString and the number of occurrences in name
+     */
     private HashMap<String, Integer> getSubWordMap(String name, int numberOfLetters) {
         if (numberOfLetters <= 0)
             return null;
         HashMap<String, Integer> subWordMap = new HashMap<>();
-        Integer counrValue;
+        Integer countValue;
         String currentSubString;
         for (int i = 0; i <= name.length() - numberOfLetters; i++) {
             currentSubString = name.substring(i, i + numberOfLetters);
             if (subWordMap.containsKey(currentSubString)) {
-                counrValue = new Integer(subWordMap.get(currentSubString).intValue() + 1);
+                countValue = new Integer(subWordMap.get(currentSubString).intValue() + 1);
                 subWordMap.remove(subWordMap);
             } else {
-                counrValue = new Integer(0);
+                countValue = new Integer(0);
             }
-            subWordMap.put(currentSubString, counrValue);
+            subWordMap.put(currentSubString, countValue);
         }
         return subWordMap;
     }
 
+    /**
+     * searches for all the subString with maximum occurrences
+     *
+     * @param subWordMap the map of substrings
+     * @return list of strings which occurred the most
+     */
     private List<String> getMaxAppearanceList(HashMap<String, Integer> subWordMap) {
-        List<String> maxSubWordList=new ArrayList<>();
-        int maxAppearance=0;
+        List<String> maxSubWordList = new ArrayList<>();
+        int maxAppearance = 0;
         int currentValue;
-        for (String subWord :subWordMap.keySet()) {
-            currentValue=subWordMap.get(subWord).intValue();
-            if(currentValue>maxAppearance){
-                maxSubWordList=new ArrayList<>();
+        for (String subWord : subWordMap.keySet()) {
+            currentValue = subWordMap.get(subWord).intValue();
+            if (currentValue > maxAppearance) {
+                maxSubWordList = new ArrayList<>();
                 maxSubWordList.add(subWord);
-                maxAppearance=currentValue;
-            }
-            else if(currentValue == maxAppearance){
+                maxAppearance = currentValue;
+            } else if (currentValue == maxAppearance) {
                 maxSubWordList.add(subWord);
             }
 
