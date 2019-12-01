@@ -178,9 +178,4 @@ public class WordAnalytics {
         }
         return maxSubWordList;
     }
-
-    public void printer(){
-        System.out.println("i did it");
-    }
-
 }
