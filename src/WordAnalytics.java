@@ -58,8 +58,9 @@ public class WordAnalytics {
             subWordMap = getSubWordMap(name, numberOfLetters);
 //          printSubWordMap(subWordMAp, name, numberOfLetters);//TODO switch print
             for (String subWord : subWordMap.keySet()) {
-                System.out.println(subWord + ":" + subWordMap.get(subWord));
+                System.out.print(subWord + ":" + subWordMap.get(subWord)+" ");
             }
+            System.out.println();
         }
     }
 
