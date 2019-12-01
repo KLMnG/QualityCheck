@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -5,6 +8,30 @@ import java.util.List;
 public class WordAnalytics {
 
     private List<String> namesList;
+
+
+    public WordAnalytics() {
+        this.namesList = getNamesFromFile("words.txt");
+    }
+
+    private List<String> getNamesFromFile(String fileName) {
+        BufferedReader reader;
+        List<String> names=new ArrayList<>();
+        try{
+            reader =new BufferedReader(new FileReader(fileName));
+            String line = reader.readLine();
+            while (line!=null){
+                names.add(line);
+                line=reader.readLine();
+            }
+            reader.close();
+        }
+
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return names;
+    }
 
     /**
      * prints the occurrence of subString in all of the names in the list
@@ -31,7 +58,7 @@ public class WordAnalytics {
             subWordMap = getSubWordMap(name, numberOfLetters);
 //          printSubWordMap(subWordMAp, name, numberOfLetters);//TODO switch print
             for (String subWord : subWordMap.keySet()) {
-                System.out.println(subWord + ":" + subWordMap.get(subWord).intValue());
+                System.out.println(subWord + ":" + subWordMap.get(subWord));
             }
         }
     }
@@ -80,9 +107,9 @@ public class WordAnalytics {
         Integer counrValue;
         for (String subWord : subWordMap.keySet()) {
             if (allSubWordMap.containsKey(subWord)) {
-                counrValue = new Integer(allSubWordMap.get(subWord).intValue() + subWordMap.get(subWord).intValue());
+                counrValue = allSubWordMap.get(subWord) + subWordMap.get(subWord);
             } else {
-                counrValue = new Integer(subWordMap.get(subWord));
+                counrValue = subWordMap.get(subWord);
             }
             allSubWordMap.put(subWord, counrValue);
         }
@@ -97,7 +124,7 @@ public class WordAnalytics {
         String currentSubString;
         for (int i = name.length(); i >= numberOfLetters; i -= numberOfLetters) {
             currentSubString = name.substring(i - numberOfLetters, i);
-            System.out.println(currentSubString + ":" + subWordMAp.get(currentSubString).intValue());
+            System.out.println(currentSubString + ":" + currentSubString);
 
         }
     }
@@ -118,10 +145,10 @@ public class WordAnalytics {
         for (int i = 0; i <= name.length() - numberOfLetters; i++) {
             currentSubString = name.substring(i, i + numberOfLetters);
             if (subWordMap.containsKey(currentSubString)) {
-                countValue = new Integer(subWordMap.get(currentSubString).intValue() + 1);
+                countValue =subWordMap.get(currentSubString) + 1;
                 subWordMap.remove(subWordMap);
             } else {
-                countValue = new Integer(0);
+                countValue =0;
             }
             subWordMap.put(currentSubString, countValue);
         }
@@ -139,7 +166,7 @@ public class WordAnalytics {
         int maxAppearance = 0;
         int currentValue;
         for (String subWord : subWordMap.keySet()) {
-            currentValue = subWordMap.get(subWord).intValue();
+            currentValue = subWordMap.get(subWord);
             if (currentValue > maxAppearance) {
                 maxSubWordList = new ArrayList<>();
                 maxSubWordList.add(subWord);
