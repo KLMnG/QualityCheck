@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +16,7 @@ public class WordAnalytics {
         BufferedReader reader;
         List<String> names=new ArrayList<>();
         try{
-            reader =new BufferedReader(new FileReader(fileName));
+            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(fileName)));
             String line = reader.readLine();
             while (line!=null){
                 names.add(line);
@@ -55,12 +53,14 @@ public class WordAnalytics {
     public void CountAllStrings(int numberOfLetters) {
         HashMap<String, Integer> subWordMap;
         for (String name : this.namesList) {
-            subWordMap = getSubWordMap(name, numberOfLetters);
-//          printSubWordMap(subWordMAp, name, numberOfLetters);//TODO switch print
-            for (String subWord : subWordMap.keySet()) {
-                System.out.print(subWord + ":" + subWordMap.get(subWord)+" ");
+            if (name.length() >= numberOfLetters) {
+                StringBuilder builder = new StringBuilder();
+                subWordMap = getSubWordMap(name, numberOfLetters);
+                for (String subWord : subWordMap.keySet()) {
+                    builder.append(subWord + ":" + subWordMap.get(subWord) + " ");
+                }
+                System.out.println(builder.substring(0,builder.length()-1));
             }
-            System.out.println();
         }
     }
 
@@ -117,20 +117,6 @@ public class WordAnalytics {
     }
 
     /**
-     * @param subWordMAp
-     * @param name
-     * @param numberOfLetters
-     */
-    private void printSubWordMap(HashMap<String, Integer> subWordMAp, String name, int numberOfLetters) {
-        String currentSubString;
-        for (int i = name.length(); i >= numberOfLetters; i -= numberOfLetters) {
-            currentSubString = name.substring(i - numberOfLetters, i);
-            System.out.println(currentSubString + ":" + currentSubString);
-
-        }
-    }
-
-    /**
      * creates a map if every subString of length - numberOfLetters in name and the amount of its occurrences
      *
      * @param name            the given string to extract subStrings
@@ -146,10 +132,10 @@ public class WordAnalytics {
         for (int i = 0; i <= name.length() - numberOfLetters; i++) {
             currentSubString = name.substring(i, i + numberOfLetters);
             if (subWordMap.containsKey(currentSubString)) {
-                countValue =subWordMap.get(currentSubString) + 1;
+                countValue = subWordMap.get(currentSubString) + 1;
                 subWordMap.remove(subWordMap);
             } else {
-                countValue =0;
+                countValue = 1;
             }
             subWordMap.put(currentSubString, countValue);
         }

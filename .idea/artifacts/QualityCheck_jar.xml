@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="QualityCheck:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/QualityCheck_jar</output-path>
+    <root id="archive" name="QualityCheck.jar">
+      <element id="module-output" name="QualityCheck" />
+    </root>
+  </artifact>
+</component>
