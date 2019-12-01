@@ -179,5 +179,4 @@ public class WordAnalytics {
         }
         return maxSubWordList;
     }
-
 }
