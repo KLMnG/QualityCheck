@@ -5,18 +5,13 @@ import java.util.List;
 
 public class WordAnalytics {
 
-    private List<String> namesList;
+    private static List<String> namesList= getNamesFromFile("words.txt");;
 
-
-    public WordAnalytics() {
-        this.namesList = getNamesFromFile("words.txt");
-    }
-
-    private List<String> getNamesFromFile(String fileName) {
+    private static List<String> getNamesFromFile(String fileName) {
         BufferedReader reader;
         List<String> names=new ArrayList<>();
         try{
-            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(fileName)));
+            reader = new BufferedReader(new InputStreamReader(WordAnalytics.class.getResourceAsStream(fileName)));
             String line = reader.readLine();
             while (line!=null){
                 names.add(line);
@@ -36,9 +31,9 @@ public class WordAnalytics {
      *
      * @param subString the given subString
      */
-    public void CountSpecificString(String subString) {
+    public static void CountSpecificString(String subString) {
         int nameCounter = 0;
-        for (String name : this.namesList) {
+        for (String name : namesList) {
             if (name.contains(subString))
                 nameCounter++;
         }
@@ -50,9 +45,9 @@ public class WordAnalytics {
      *
      * @param numberOfLetters -size of the subString
      */
-    public void CountAllStrings(int numberOfLetters) {
+    public static void CountAllStrings(int numberOfLetters) {
         HashMap<String, Integer> subWordMap;
-        for (String name : this.namesList) {
+        for (String name : namesList) {
             if (name.length() >= numberOfLetters) {
                 StringBuilder builder = new StringBuilder();
                 subWordMap = getSubWordMap(name, numberOfLetters);
@@ -69,10 +64,10 @@ public class WordAnalytics {
      *
      * @param numberOfLetters - length of subString
      */
-    public void CountMaxString(int numberOfLetters) {
+    public static void CountMaxString(int numberOfLetters) {
         HashMap<String, Integer> allSubWordMap = new HashMap<>();
         HashMap<String, Integer> subWordMAp;
-        for (String name : this.namesList) {
+        for (String name : namesList) {
             subWordMAp = getSubWordMap(name.toLowerCase(), numberOfLetters);
             addToAllSubMap(allSubWordMap, subWordMAp);
         }
@@ -89,9 +84,9 @@ public class WordAnalytics {
      *
      * @param stringInput - the given string
      */
-    public void AllIncludesString(String stringInput) {
+    public static void AllIncludesString(String stringInput) {
         stringInput = stringInput.toLowerCase();
-        for (String name : this.namesList) {
+        for (String name : namesList) {
             if (stringInput.contains(name.toLowerCase())) {
                 System.out.println(name);
             }
@@ -104,7 +99,7 @@ public class WordAnalytics {
      * @param allSubWordMap the map to add to
      * @param subWordMap    the map to take the value from
      */
-    private void addToAllSubMap(HashMap<String, Integer> allSubWordMap, HashMap<String, Integer> subWordMap) {
+    private static void addToAllSubMap(HashMap<String, Integer> allSubWordMap, HashMap<String, Integer> subWordMap) {
         Integer counrValue;
         for (String subWord : subWordMap.keySet()) {
             if (allSubWordMap.containsKey(subWord)) {
@@ -123,7 +118,7 @@ public class WordAnalytics {
      * @param numberOfLetters the size of the subString
      * @return a map of subString and the number of occurrences in name
      */
-    private HashMap<String, Integer> getSubWordMap(String name, int numberOfLetters) {
+    private static HashMap<String, Integer> getSubWordMap(String name, int numberOfLetters) {
         if (numberOfLetters <= 0)
             return null;
         HashMap<String, Integer> subWordMap = new HashMap<>();
@@ -148,7 +143,7 @@ public class WordAnalytics {
      * @param subWordMap the map of substrings
      * @return list of strings which occurred the most
      */
-    private List<String> getMaxAppearanceList(HashMap<String, Integer> subWordMap) {
+    private static List<String> getMaxAppearanceList(HashMap<String, Integer> subWordMap) {
         List<String> maxSubWordList = new ArrayList<>();
         int maxAppearance = 0;
         int currentValue;
@@ -164,5 +159,63 @@ public class WordAnalytics {
 
         }
         return maxSubWordList;
+    }
+
+    public static void main(String[] args) {
+        int integerArgumentValue = 0;
+
+        if (args.length == 0) {
+            System.out.println("Not enough arguments");
+            System.out.println(usage());
+            System.exit(-1);
+        } else if (args.length == 1 && args[0].equals("GenerateName")) {
+            System.out.println("Didn't even flinch");
+        } else if (args.length == 2) {
+            switch (args[0]) {
+                case "CountSpecificString":
+                    CountSpecificString(args[1]);
+                    break;
+                case "CountAllStrings":
+
+                    try {
+                        integerArgumentValue = Integer.parseInt(args[1]);
+                    }catch (NumberFormatException e){
+                        System.out.println("Second argument for 'CountAllStrings' must be a number but got :'" + args[1] + "'");
+                        System.exit(-1);
+                    }
+                    CountAllStrings(integerArgumentValue);
+                    break;
+                case "CountMaxString":
+                    try {
+                        integerArgumentValue = Integer.parseInt(args[1]);
+                    }catch (NumberFormatException e){
+                        System.out.println("Second argument for 'CountMaxString' must be a number but got :'" + args[1] + "'");
+                        System.exit(-1);
+                    }
+                    CountMaxString(integerArgumentValue);
+                    break;
+                case "AllIncludesString":
+                    AllIncludesString(args[1]);
+                    break;
+                default:
+                    System.out.println(usage());
+            }
+        }
+        else{
+            System.out.println(usage());
+        }
+    }
+
+    private static String usage(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Usage:\n");
+        builder.append("    CountSpecificString <STRING>\n");
+        builder.append("    CountAllStrings <LENGTH>\n");
+        builder.append("    CountMaxString <LENGTH>\n");
+        builder.append("    AllIncludesString <STRING>\n");
+        builder.append("    GenerateName\n");
+
+        return builder.toString();
+
     }
 }
